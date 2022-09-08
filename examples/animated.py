@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+
 import furuta_plot as fuplot
+import logging
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 def main():
     fig = plt.figure(figsize=(16, 9))
@@ -21,4 +24,9 @@ def main():
 
 
 if __name__ == "__main__":
+    loghandler = logging.StreamHandler(sys.stderr)
+    loghandler.setFormatter(logging.Formatter("[%(asctime)s %(levelname)s] %(name)s:%(lineno)d: %(message)s"))
+    logging.getLogger().addHandler(loghandler)
+    logging.getLogger().setLevel(logging.INFO)
+
     main()

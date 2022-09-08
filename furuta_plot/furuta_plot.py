@@ -2,11 +2,18 @@
 furuta_plot.py - High-level plotting interface
 """
 
-from . import backend
+import logging
+import os
 
 from matplotlib import projections
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
+from . import backend
+
+LOG = logging.getLogger(__name__)
+LOG.addHandler(logging.NullHandler())
+
 
 class FurutaPlotter:
     def __init__(self, fig, gridsize=(1, 1)):
@@ -158,7 +165,7 @@ class FurutaPlotter:
             if properties["y_label"] is not None:
                 ax.set_ylabel(properties["y_label"])
 
-    def animate(self, fps=30, **data):
+    def animate(self, fps=30, save_as=None, **data):
         """
         Animates the pendulum over the length of data.
 
@@ -166,6 +173,10 @@ class FurutaPlotter:
         ----------
         fps : float, optional
             Frames per second (default is 30)
+
+        save_as : str, optional
+            Filename to save animation as, rather than to visualize it
+            directly. Note that this require ffmpeg to be installed (default is None)
 
         data : keyword arguments
             The data to be plotted, must map to collections of the same length
@@ -189,4 +200,24 @@ class FurutaPlotter:
             interval=(1000/fps),
             repeat=False
         )
-        plt.show()
+        if save_as is not None:
+            LOG.debug("Saving animation as file")
+            mp4_writer = animation.FFMpegWriter(fps=fps, codec="h264")
+
+            contents = os.listdir(".")
+
+            if save_as.endswith(".mp4"):
+                save_as = save_as[:-4]
+
+            filename = f"{save_as}.mp4"
+            f_suffix = 1
+            while filename in contents:
+                filename = f"{save_as}-{f_suffix}.mp4"
+                f_suffix += 1
+
+            LOG.info(f"Saving as {filename}... (this may take a couple of minutes)")
+            ani.save(filename, writer=mp4_writer)
+            LOG.info("Movie clip saved.")
+        else:
+            LOG.info("Rendering animation")
+            plt.show()
