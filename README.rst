@@ -38,7 +38,7 @@ See the ``examples/`` directory in the git repository for more usage examples.
 Running Locally
 ===============
 
-If matplotlib, and numpy are installed, then you can run one of the examples
+If matplotlib and numpy are installed, then you can run one of the examples
 directly by putting the PYTHONPATH variable in front:
 
 .. code-block::
