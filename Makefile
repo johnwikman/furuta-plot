@@ -15,3 +15,15 @@ coherent:
 build: coherent
 	rm -rf dist
 	python3 setup.py sdist
+
+
+# Testing rules
+
+CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
+CONDA_ENV = _furuta_test_
+CONDA_PACKAGES = python=3.10.* matplotlib=3.5.* numpy=1.23.*
+
+dbg_reset:
+	$(CONDA_ACTIVATE) base \
+	&& conda env remove -n $(CONDA_ENV) \
+	&& conda create -y -n $(CONDA_ENV) $(CONDA_PACKAGES)

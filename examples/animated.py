@@ -7,9 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
+
 def main():
     fig = plt.figure(figsize=(16, 9))
-    p = fuplot.FurutaPlotter(fig, (1,2))
+    p = fuplot.FurutaPlotter(fig, gridsize=(1, 2))
 
     p.add_3D(span=1)
 
